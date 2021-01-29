@@ -7,7 +7,7 @@ import { Attribute, SugarElement } from '@ephox/sugar';
 import { renderListBox } from 'tinymce/themes/silver/ui/dialog/ListBox';
 import { DisablingSteps } from '../../../module/DisablingSteps';
 import { RepresentingSteps } from '../../../module/ReperesentingSteps';
-import TestExtras from '../../../module/TestExtras';
+import { TestExtras } from '../../../module/TestExtras';
 
 UnitTest.asynctest('ListBox component Test', (success, failure) => {
   const helpers = TestExtras();

@@ -7,7 +7,7 @@ import { ApiUrlData } from 'tinymce/themes/silver/backstage/UrlInputBackstage';
 import { LinkTargetType } from 'tinymce/themes/silver/ui/core/LinkTargets';
 import { renderUrlInput } from 'tinymce/themes/silver/ui/dialog/UrlInput';
 import { DisablingSteps } from '../../../module/DisablingSteps';
-import TestExtras from '../../../module/TestExtras';
+import { TestExtras } from '../../../module/TestExtras';
 
 UnitTest.asynctest('UrlInput component Test', (success, failure) => {
   const helpers = TestExtras();

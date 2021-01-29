@@ -1,10 +1,35 @@
 import { Attachment, Behaviour, DomFactory, Gui, GuiFactory, Positioning } from '@ephox/alloy';
-import { Fun } from '@ephox/katamari';
+import { after, before } from '@ephox/bedrock-client';
+import { Fun, Obj, Optional } from '@ephox/katamari';
 import { Class, SugarBody } from '@ephox/sugar';
 import Editor from 'tinymce/core/api/Editor';
+import { UiFactoryBackstage, UiFactoryBackstageShared } from 'tinymce/themes/silver/backstage/Backstage';
 import TestBackstage from './TestBackstage';
 
-export default () => {
+export interface TestExtras {
+  readonly backstage: UiFactoryBackstage;
+  readonly shared: UiFactoryBackstageShared;
+  readonly extras: {
+    readonly editor: Editor;
+    readonly backstage: UiFactoryBackstage;
+  };
+  readonly destroy: () => void;
+  readonly uiMothership: Gui.GuiSystem;
+  readonly mockEditor: Editor;
+}
+
+interface BddTestExtras {
+  readonly backstage: () => UiFactoryBackstage;
+  readonly shared: () => UiFactoryBackstageShared;
+  readonly extras: () => {
+    readonly editor: Editor;
+    readonly backstage: UiFactoryBackstage;
+  };
+  readonly uiMothership: () => Gui.GuiSystem;
+  readonly mockEditor: () => Editor;
+}
+
+export const TestExtras = (): TestExtras => {
 
   const oldSink = document.querySelectorAll('.mce-silver-sink');
   if (oldSink.length > 0) {
@@ -55,3 +80,30 @@ export default () => {
     mockEditor
   };
 };
+
+export const bddSetup = (): BddTestExtras => {
+  let helpers: Optional<TestExtras> = Optional.none();
+
+  before(() => {
+    helpers = Optional.some(TestExtras());
+  });
+
+  after(() => {
+    helpers.each((h) => h.destroy());
+    helpers = Optional.none();
+  });
+
+  const get = <K extends keyof BddTestExtras>(name: K) => (): TestExtras[K] => helpers
+    .bind((h) => Obj.get(h, name))
+    .getOrDie('The setup hooks have not run yet');
+
+  return {
+    backstage: get('backstage'),
+    shared: get('shared'),
+    extras: get('extras'),
+    uiMothership: get('uiMothership'),
+    mockEditor: get('mockEditor')
+  };
+};
+
+export default TestExtras;

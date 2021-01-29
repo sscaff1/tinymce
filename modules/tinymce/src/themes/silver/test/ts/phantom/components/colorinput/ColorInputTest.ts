@@ -8,7 +8,7 @@ import { SelectorFind, SugarElement, Traverse } from '@ephox/sugar';
 
 import { renderColorInput } from 'tinymce/themes/silver/ui/dialog/ColorInput';
 
-import TestExtras from '../../../module/TestExtras';
+import { TestExtras } from '../../../module/TestExtras';
 
 const choiceItem: 'choiceitem' = 'choiceitem';
 
